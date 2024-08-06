@@ -1,0 +1,71 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/04/Fill.asm
+
+// Runs an infinite loop that listens to the keyboard input.
+// When a key is pressed (any key), the program blackens the screen,
+// i.e. writes "black" in every pixel;
+// the screen should remain fully black as long as the key is pressed.
+// When no key is pressed, the program clears the screen, i.e. writes
+// "white" in every pixel;
+// the screen should remain fully clear as long as no key is pressed.
+
+// Put your code here.
+
+
+//while True:
+//    current_color = white
+//    i = start (@SCREEN)
+//    if kbd.pressed:
+//      current_color = black
+//    while(i <= end (@KBD)):
+//      color i-th row
+//      i+=1
+
+// end of screen
+@KBD
+D = A
+@end
+M = D
+(LOOP)
+// while True:
+// current_color = white
+@currcolor
+M = 0
+// i = 16384  (start)
+@SCREEN
+D = A
+@i
+M = D
+@KBD
+D = M
+// if key_is_pressed: current_color = black
+@BLACK_CHANGE
+D;JNE
+@COLOR
+0;JMP
+(BLACK_CHANGE)
+@currcolor
+M = -1
+// while i <= end:
+(COLOR)
+// if i == end: break;
+// end - i == 0 -> break
+@i
+D = M
+@end
+D = M - D
+@LOOP
+D;JEQ
+// color i-th row
+@currcolor
+D = M
+@i
+A = M
+M = D
+// i += 1
+@i
+M = M + 1
+@COLOR
+0;JMP
