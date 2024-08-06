@@ -1,0 +1,16 @@
+SELECT e.first_name || ' - ' || e.last_name "F and L",
+       NVL(d.department_name, 'X') "Department Name",
+       manager.first_name "Manager Name",
+       TO_CHAR(e.salary, '$99,999.00') "Salary",
+       managersmanager.first_name "Manager's Manager Name",
+       managersmanager.salary "Manager's Manager Salary"
+
+FROM EMPLOYEES e JOIN DEPARTMENTS d
+ON (e.department_id = d.department_id)
+JOIN EMPLOYEES manager
+ON (e.manager_id = manager.employee_id)
+JOIN EMPLOYEES managersmanager
+ON (manager.manager_id = managersmanager.employee_id)
+
+WHERE (managersmanager.first_name LIKE '%a%' OR managersmanager.first_name LIKE '%A%')
+AND (MOD(managersmanager.salary, 17) = 0);

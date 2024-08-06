@@ -1,0 +1,16 @@
+SELECT SUBSTR(j.job_id, 1, INSTR(J.JOB_ID, '_') - 1) "pref",
+       COUNT(*) "count",
+       (CASE WHEN(COUNT(*) = 0)
+             THEN 'N' ELSE 'Y' END) "yn",
+       AVG(e.salary) "avg_salary",
+       (SELECT COUNT(*) FROM EMPLOYEES e WHERE 
+               TO_CHAR(e.hire_date, 'YYYY') = '2002' AND
+               SUBSTR(j.job_id, 1, INSTR(J.JOB_ID, '_') - 1) = SUBSTR(e.job_id, 1, INSTR(e.JOB_ID, '_') - 1)) "cnt_2002"
+FROM JOBS j JOIN EMPLOYEES e
+ON (e.job_id = j.job_id)
+GROUP BY SUBSTR(j.job_id, 1, INSTR(J.JOB_ID, '_') - 1)
+ORDER BY CASE WHEN SUBSTR(j.job_id, 1, INSTR(J.JOB_ID, '_') - 1) = 'IT' then 1
+              WHEN SUBSTR(j.job_id, 1, INSTR(J.JOB_ID, '_') - 1) = 'MK' then 2
+              ELSE 3
+         END,
+AVG(e.salary) DESC;

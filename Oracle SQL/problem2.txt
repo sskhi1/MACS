@@ -1,0 +1,13 @@
+SELECT e.first_name || ' ' || e.last_name "full_name",
+       TO_CHAR(e.salary, '$999,999,999.99') "Salary",
+       (CASE WHEN((e.email IS NOT NULL) AND (e.email like '%@%'))
+             THEN SUBSTR(e.email, 1, INSTR(e.email, '@') - 1) ELSE 'INVALID EMAIL' END) "Email Preffix",
+       (TRUNC(MONTHS_BETWEEN(SYSDATE, TRUNC(SYSDATE, 'YEAR'))) + 1) * e.salary "This Year Total Salary",
+       NVL(TO_CHAR(e.commission_pct), 'No Com') "Comission"
+FROM Employees e WHERE
+       (e.department_id = 50 OR (TRUNC(MONTHS_BETWEEN(SYSDATE, e.hire_date)) + 1)/12 >= 5)
+       AND (e.phone_number LIKE '515%')
+       AND ((NOT e.job_id = 'IT_PROG') AND (NOT e.job_id = 'PU_CLERK'))
+       AND (e.salary >= 5000 AND e.salary < 10000)
+       AND (e.manager_id IS NOT NULL)
+ORDER BY e.salary DESC, e.hire_date ASC;
